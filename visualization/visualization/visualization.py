@@ -1,13 +1,11 @@
+#Thinkpad
+
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Bool
-from std_msgs.msg import String
-from std_msgs.msg import Int16MultiArray
-from geometry_msgs.msg import Point
 from custom_interfaces.msg import NavigationReport
-from rclpy.qos import ReliabilityPolicy, QoSProfile
 from collections import deque 
-import numpy as np
+import matplotlib.pyplot as plt
+from datetime import datetime
 
 # Constants for the number of bits allocated for agent ID and message ID
 AGENT_ID_BITS = 3  # Adjust based on the number of agents (e.g., 2, 3, 4, ...)
@@ -18,8 +16,15 @@ class Visualization(Node):
         super().__init__('visualization')
         # Initialize parameters, publishers, subscribers, and other variables
         self.init_parameters()
-        self.init_publishers()
         self.init_subscribers()
+        self.start_time = datetime.now()
+        # Initialize the plot
+        self.fig, self.ax = plt.subplots()
+        self.ax.set_xlabel("Time")
+        self.ax.set_ylabel("Robot ID")
+        self.ax.set_title("Messages Received Over Time")
+        plt.ion()
+        plt.show()
 
     def init_parameters(self):
         # Initialize message queue for the sent messages
@@ -28,10 +33,8 @@ class Visualization(Node):
         #self.rec_message_queue = deque()
         self.sent_ids = []
         self.received_ids = {}
-
-    def init_publishers(self):
-        # Create publishers for sending messages
-        pass
+        self.x_data = []  # To store the current_time values for the last 10 messages
+        self.window_size = 10  # Number of messages in the moving window
 
     def init_subscribers(self):
         # Create subscribers for receiving messages
@@ -39,25 +42,66 @@ class Visualization(Node):
         self.visRecSubscriber = self.create_subscription(NavigationReport, 'received_0', self.received_callback, 10)
 
     def nav_callback(self, msg):
-        # Add the received message to the send_message_queue
-        #self.send_message_queue.append(msg)
         # Extract the data for plotting
         agent_id, message_counter = self.extract_from_message_id(msg.message_id)
         self.sent_ids.append(message_counter)
+        
         # Formatting the log message
         log_message = '---'.join(map(str, self.sent_ids))
         self.get_logger().info(f'Robot {agent_id} sent: {log_message}\n')
 
+        # Get current time difference from the start time in seconds
+        current_time = (datetime.now() - self.start_time).total_seconds()
+
+        # Plotting
+        self.ax.scatter(current_time, agent_id, color='red')  # Use a different color to distinguish sent messages
+        self.ax.text(current_time, agent_id, str(message_counter))
+
+        # Adjust moving window
+        self.x_data.append(current_time)
+        if len(self.x_data) > self.window_size:
+            self.x_data.pop(0)
+        self.ax.set_xlim(self.x_data[0], current_time)
+        
+        # Adjust Y-axis
+        highest_agent_id = max(max(self.received_ids.keys(), default=-1), agent_id)
+        self.ax.set_ylim(-1, highest_agent_id + 1)
+        self.ax.set_yticks(range(-1, highest_agent_id + 2))  # Setting the Y-ticks to integers
+        
+        plt.draw()
+        plt.pause(0.001)  # pause for a short duration to allow the plot to update
+
     def received_callback(self, msg):
         agent_id, message_counter = self.extract_from_message_id(msg.message_id)
+
         # Check if agent_id is already a key in the dictionary
         if agent_id not in self.received_ids:
             self.received_ids[agent_id] = []
         self.received_ids[agent_id].append(message_counter)
+        
         # Formatting the log message
         log_message = '---'.join(map(str, self.received_ids[agent_id]))
         self.get_logger().info(f'Received from robot {agent_id}: {log_message}\n')
 
+        # Get current time difference from the start time in seconds
+        current_time = (datetime.now() - self.start_time).total_seconds()
+        # Plotting
+        self.ax.scatter(current_time, agent_id, color='blue')
+        self.ax.text(current_time, agent_id, str(message_counter))
+        
+        # Adjust moving window
+        self.x_data.append(current_time)
+        if len(self.x_data) > self.window_size:
+            self.x_data.pop(0)
+        self.ax.set_xlim(self.x_data[0], current_time)
+
+        # Adjust Y-axis
+        highest_agent_id = max(max(self.received_ids.keys(), default=-1), agent_id)
+        self.ax.set_ylim(-1, highest_agent_id + 1)
+        self.ax.set_yticks(range(-1, highest_agent_id + 2))  # Setting the Y-ticks to integers
+        
+        plt.draw()
+        plt.pause(0.001)  # pause for a short duration to allow the plot to update
 
     def extract_from_message_id(self, message_id):
         # Extract message_counter from the lower MESSAGE_ID_BITS bits of message_id
