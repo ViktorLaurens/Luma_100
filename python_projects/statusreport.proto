@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package underwater;
+
+message StatusReport {
+  string robot_id = 1;         // Unique identifier for the robot
+  string timestamp = 2;       // Timestamp of the status report
+  float battery_voltage = 3;  // Current battery voltage in volts
+  float temperature = 4;       // Temperature in degrees Celsius
+  float depth = 5;             // Current depth in meters
+  bool system_ok = 6;          // System health status (true if OK, false if issues)
+  repeated SensorData sensors = 7; // List of sensor data
+}
+
+message SensorData {
+  string sensor_type = 1;      // Type of sensor (e.g., camera, sonar, acoustic)
+  string data = 2;             // Raw data from the sensor (encoded as bytes)
+}
+
+

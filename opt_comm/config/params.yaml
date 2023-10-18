@@ -1,0 +1,24 @@
+tdma_node: 
+  ros__parameters: 
+    baud_rate: 115200 
+    agent_id: 0
+    time_slot_duration: 1.0
+    num_agents: 2
+    message_written_flag: False 
+    header_received: False
+    message_length: 0
+    ack_received: False
+    sequence_number: 0
+    previous_ack_id: 0
+    ack_id: 0
+
+py_node: 
+  ros__parameters: 
+    baud_rate: 115200 
+    agent_id: 0
+    time_slot_duration: 1.0
+    num_agents: 2
+    message_written_flag: False 
+    header_received: False
+    message_length: 0
+

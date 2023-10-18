@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package underwater;
+
+message StatusReport {
+  double x = 1;  
+  double y = 2;  
+  double z = 3;  
+  enum VehicleClass {
+        AUV = 0;
+        USV = 1;
+        SHIP = 2;
+  }
+  VehicleClass veh_class = 4;
+  bool battery_ok = 5;
+} 
+
+

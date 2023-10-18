@@ -1,0 +1,7 @@
+bool ready_to_transmit
+---
+float64 x
+float64 y
+float64 z
+uint8 veh_class
+bool battery_ok
