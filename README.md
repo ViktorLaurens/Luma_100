@@ -68,7 +68,7 @@ This is an example of how to list things you need to use the software and how to
 1. Make your own ROS2 workspace and src folder
 2. Clone the repo in the src folder
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/ViktorLaurens/Luma_100.git
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
