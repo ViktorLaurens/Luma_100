@@ -1,3 +1,5 @@
+# Luma 100: Optical Communication for BlueROV2
+
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -27,7 +29,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-This project was done in relation to an internship at the Norwegian University of Science and Technology in Trondheim, Norway. The project is implementing optical communication between robots in order to achieve communication in a distributed system of robots without tether but with optical modems instead and achieve motion planning in this way to enable to robots to collaborate on tasks together.
+This project was conducted during an internship at the Norwegian University of Science and Technology in Trondheim, Norway. It focuses on implementing optical communication between robots. The objective is to facilitate communication in a distributed robot system without the need for tethers. Instead, optical modems are used. This setup aims to achieve motion planning that allows the robots to collaborate and jointly execute tasks.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -65,8 +67,10 @@ This is an example of how to list things you need to use the software and how to
 ### Installation
 <!--_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._-->
 
-1. Make your own ROS2 workspace and src folder
-2. Clone the repo in the src folder
+To get the system up and running, follow these steps:
+
+1. Set up your own ROS2 workspace and create a src folder
+2. Navigate to the src folder and clone the repository
    ```sh
    git clone https://github.com/ViktorLaurens/Luma_100.git
    ```
@@ -77,23 +81,29 @@ This is an example of how to list things you need to use the software and how to
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-1. ssh from the laptop to the Khadas's
-2. source ROS2
+To operate the system:
+1. SSH from the laptop to the Khadas.
+2. Source ROS2:
    ```sh
    source /opt/ros/humble/setup.bash
    ```
-3. ```sh
+3. Navigate to the ROS2 workspace:
+   ```sh
    cd ~/ros2ws
    ```
-4. ```sh
+4. Build the project:
+   ```sh
    colcon build
    ```
-5. ```sh
+5. Source the build:
+   ```sh
    source install/setup.bash
    ```
-6. ```sh
+6. Launch the desired package:
+   ```sh
    ros2 launch package_name launch_file_name.launch.py
    ```
+Remember to replace placeholders like package_name and launch_file_name with the appropriate names before publishing.
    
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
